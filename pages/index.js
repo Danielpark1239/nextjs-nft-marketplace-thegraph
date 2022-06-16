@@ -14,7 +14,6 @@ export default function Home() {
     if (error) {
         return <div>`Query Error! ${error.message}`</div>
     }
-    console.log(loading)
 
     return (
         <div className="container mx-auto">

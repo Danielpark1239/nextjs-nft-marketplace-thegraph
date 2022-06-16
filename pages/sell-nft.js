@@ -36,7 +36,7 @@ export default function Home() {
 
         await runContractFunction({
             params: approveOptions,
-            onSuccess: handleApproveSuccess(nftAddress, tokenId, price),
+            onSuccess: () => handleApproveSuccess(nftAddress, tokenId, price),
             onError: (error) => {
                 console.log(error)
             },
@@ -56,7 +56,7 @@ export default function Home() {
         }
         await runContractFunction({
             params: listOptions,
-            onSuccess: handleListSuccess,
+            onSuccess: () => handleListSuccess(),
             onError: (error) => {
                 console.log(error)
             },
@@ -66,7 +66,7 @@ export default function Home() {
     async function handleListSuccess() {
         dispatch({
             type: "success",
-            message: "NFT Listing",
+            message: "Your NFT should show up shortly!",
             title: "NFT listed",
             position: "topR",
         })
@@ -85,7 +85,7 @@ export default function Home() {
             onError: (error) => console.log(error),
         })
         if (returnedProceeds) {
-            setProceeds(returnedProceeds.toString())
+            setProceeds(ethers.utils.parseUnits(returnedProceeds.toString(), "ether"))
         }
     }
 
@@ -121,7 +121,6 @@ export default function Home() {
                 title="Sell your NFT!"
                 id="Main Form"
             />
-            <div>Withdraw {proceeds} proceeds</div>
             {proceeds != "0" ? (
                 <Button
                     onClick={() => {
@@ -136,7 +135,7 @@ export default function Home() {
                             onSuccess: () => handleWithdrawSuccess,
                         })
                     }}
-                    text="Withdraw"
+                    text={`Withdraw ${proceeds} proceeds`}
                     type="button"
                 />
             ) : (
